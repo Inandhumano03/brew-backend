@@ -1,4 +1,4 @@
-import { Cart, Product } from 'db';
+import { Product } from 'db';
 import { Schema } from 'express-validator';
 
 /**

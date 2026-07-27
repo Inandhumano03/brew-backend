@@ -2,7 +2,6 @@ import {
   Endpoint,
   EndpointAuthType,
   EndpointMethod,
-  middleware,
 } from 'node-server-engine';
 
 import {
