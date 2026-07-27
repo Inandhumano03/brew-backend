@@ -1,0 +1,205 @@
+/newsletter:
+  post:
+    summary: Subscribe to Newsletter
+    description: Subscribes a user to the newsletter.
+    operationId: createNewsletter
+    tags:
+      - Newsletter
+
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - email
+            properties:
+              email:
+                type: string
+                format: email
+                example: johndoe@gmail.com
+
+    responses:
+      '200':
+        description: Successfully subscribed
+
+      '409':
+        description: Email already subscribed
+
+      '500':
+        description: Error subscribing email
+
+  get:
+    summary: Get All Subscribers
+    description: Returns all newsletter subscribers.
+    operationId: getAllNewsletter
+    security:
+      - bearerAuth: []
+    tags:
+      - Newsletter
+
+    responses:
+      '200':
+        description: List of subscribers
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subscribers:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Newsletter'
+
+      '404':
+        description: Subscriber not found
+
+      '500':
+        description: Error getting subscribers
+
+
+/newsletter/{id}:
+  get:
+    summary: Get Subscriber By Id
+    description: Returns a newsletter subscriber using its id.
+    operationId: getNewsletterById
+    security:
+      - bearerAuth: []
+    tags:
+      - Newsletter
+
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+
+    responses:
+      '200':
+        description: Subscriber found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Newsletter'
+
+      '404':
+        description: Subscriber not found
+
+      '500':
+        description: Error getting subscriber
+
+  put:
+    summary: Update Subscriber
+    description: Updates an existing newsletter subscriber.
+    operationId: updateNewsletter
+    security:
+      - bearerAuth: []
+    tags:
+      - Newsletter
+
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                format: email
+                example: johndoe@gmail.com
+
+              status:
+                type: string
+                enum:
+                  - ACTIVE
+                  - UNSUBSCRIBED
+                example: ACTIVE
+
+    responses:
+      '200':
+        description: Subscriber updated successfully
+
+      '404':
+        description: Subscriber not found
+
+      '409':
+        description: Email already subscribed
+
+      '500':
+        description: Error updating subscriber
+
+  delete:
+    summary: Delete Subscriber
+    description: Deletes a newsletter subscriber.
+    operationId: deleteNewsletter
+    security:
+      - bearerAuth: []
+    tags:
+      - Newsletter
+
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+
+    responses:
+      '200':
+        description: Subscriber deleted successfully
+
+      '404':
+        description: Subscriber not found
+
+      '500':
+        description: Error deleting subscriber
+
+
+components:
+  schemas:
+    Newsletter:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+
+        email:
+          type: string
+          format: email
+          example: johndoe@gmail.com
+
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - UNSUBSCRIBED
+          example: ACTIVE
+
+        createdBy:
+          type: integer
+          nullable: true
+          example: 1
+
+        updatedBy:
+          type: integer
+          nullable: true
+          example: 1
+
+        createdAt:
+          type: string
+          format: date-time
+
+        updatedAt:
+          type: string
+          format: date-time

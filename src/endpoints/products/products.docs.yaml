@@ -1,0 +1,234 @@
+/products:
+  post:
+    summary: Create Product
+    description: Creates a new product.
+    operationId: createProduct
+    security:
+      - bearerAuth: []
+    tags:
+      - Products
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - productName
+              - description
+              - price
+              - category
+            properties:
+              productName:
+                type: string
+                example: iPhone 16 Pro
+
+              description:
+                type: string
+                example: Apple flagship smartphone with A18 chip.
+
+              price:
+                type: number
+                format: float
+                example: 129999
+
+              discount:
+                type: number
+                format: float
+                example: 10
+
+              category:
+                type: string
+                example: Electronics
+
+    responses:
+      '200':
+        description: Product created successfully
+      '500':
+        description: Error creating product
+
+  get:
+    summary: Get All Products
+    description: Returns all products.
+    operationId: getAllProducts
+    security:
+      - bearerAuth: []
+    tags:
+      - Products
+
+    responses:
+      '200':
+        description: List of products
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                products:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Product'
+
+      '404':
+        description: Product not found
+
+      '500':
+        description: Error getting products
+
+
+/products/{id}:
+  get:
+    summary: Get Product By Id
+    description: Returns a product using its id.
+    operationId: getProductById
+    security:
+      - bearerAuth: []
+    tags:
+      - Products
+
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+
+    responses:
+      '200':
+        description: Product found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+
+      '404':
+        description: Product not found
+
+      '500':
+        description: Error getting product
+
+  put:
+    summary: Update Product
+    description: Updates an existing product.
+    operationId: updateProduct
+    security:
+      - bearerAuth: []
+    tags:
+      - Products
+
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              productName:
+                type: string
+                example: Samsung Galaxy S25
+
+              description:
+                type: string
+                example: Updated Description
+
+              price:
+                type: number
+                example: 89999
+
+              discount:
+                type: number
+                example: 15
+
+              category:
+                type: string
+                example: Mobiles
+
+    responses:
+      '200':
+        description: Product updated successfully
+
+      '404':
+        description: Product not found
+
+      '500':
+        description: Error updating product
+
+  delete:
+    summary: Delete Product
+    description: Deletes a product.
+    operationId: deleteProduct
+    security:
+      - bearerAuth: []
+    tags:
+      - Products
+
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+
+    responses:
+      '200':
+        description: Product deleted successfully
+
+      '404':
+        description: Product not found
+
+      '500':
+        description: Error deleting product
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+
+        productName:
+          type: string
+          example: MacBook Pro
+
+        description:
+          type: string
+          example: Apple M4 Max Laptop
+
+        price:
+          type: number
+          format: float
+          example: 249999
+
+        discount:
+          type: number
+          format: float
+          example: 10
+
+        category:
+          type: string
+          example: Laptops
+
+        createdBy:
+          type: integer
+          example: 1
+
+        updatedBy:
+          type: integer
+          example: 2
+
+        createdAt:
+          type: string
+          format: date-time
+
+        updatedAt:
+          type: string
+          format: date-time

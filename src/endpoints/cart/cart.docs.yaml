@@ -1,0 +1,269 @@
+/cart:
+  post:
+    summary: Add Product to Cart
+    description: Adds a product to the authenticated user's cart.
+    operationId: addToCart
+    security:
+      - bearerAuth: []
+    tags:
+      - Cart
+
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - productId
+              - quantity
+            properties:
+              productId:
+                type: integer
+                example: 1
+
+              quantity:
+                type: integer
+                minimum: 1
+                example: 2
+
+    responses:
+      '200':
+        description: Product added to cart successfully
+
+      '400':
+        description: Invalid request
+
+      '404':
+        description: Product not found
+
+      '500':
+        description: Error adding product to cart
+
+  get:
+    summary: Get My Cart
+    description: Returns all active cart items of the authenticated user.
+    operationId: getMyCart
+    security:
+      - bearerAuth: []
+    tags:
+      - Cart
+
+    responses:
+      '200':
+        description: Cart items fetched successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cart:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Cart'
+
+      '500':
+        description: Error getting cart items
+
+
+/cart/{id}:
+  get:
+    summary: Get Cart Item By Id
+    description: Returns a single cart item.
+    operationId: getCartItemById
+    security:
+      - bearerAuth: []
+    tags:
+      - Cart
+
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+
+    responses:
+      '200':
+        description: Cart item found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cart'
+
+      '404':
+        description: Cart item not found
+
+      '500':
+        description: Error getting cart item
+
+  put:
+    summary: Update Cart Item
+    description: Updates quantity or status of a cart item.
+    operationId: updateCart
+    security:
+      - bearerAuth: []
+    tags:
+      - Cart
+
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              quantity:
+                type: integer
+                minimum: 1
+                example: 3
+
+              status:
+                type: string
+                enum:
+                  - ACTIVE
+                  - ORDERED
+                  - REMOVED
+                example: ACTIVE
+
+    responses:
+      '200':
+        description: Cart updated successfully
+
+      '404':
+        description: Cart item not found
+
+      '500':
+        description: Error updating cart
+
+  delete:
+    summary: Remove Item From Cart
+    description: Removes a product from the cart.
+    operationId: deleteCartItem
+    security:
+      - bearerAuth: []
+    tags:
+      - Cart
+
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+
+    responses:
+      '200':
+        description: Cart item removed successfully
+
+      '404':
+        description: Cart item not found
+
+      '500':
+        description: Error deleting cart item
+
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+
+        userId:
+          type: integer
+          example: 5
+
+        productId:
+          type: integer
+          example: 12
+
+        quantity:
+          type: integer
+          example: 2
+
+        totalPrice:
+          type: number
+          format: float
+          example: 3999.98
+
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - ORDERED
+            - REMOVED
+          example: ACTIVE
+
+        createdBy:
+          type: integer
+          example: 5
+
+        updatedBy:
+          type: integer
+          example: 5
+
+        createdAt:
+          type: string
+          format: date-time
+
+        updatedAt:
+          type: string
+          format: date-time
+
+        product:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 12
+
+            productName:
+              type: string
+              example: iPhone 16 Pro
+
+            description:
+              type: string
+              example: Apple flagship smartphone
+
+            price:
+              type: number
+              format: float
+              example: 129999
+
+            discount:
+              type: number
+              format: float
+              example: 10
+
+            category:
+              type: string
+              example: Electronics
+
+        user:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 5
+
+            firstName:
+              type: string
+              example: John
+
+            lastName:
+              type: string
+              example: Doe
+
+            email:
+              type: string
+              example: john@example.com
