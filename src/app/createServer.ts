@@ -8,7 +8,8 @@ export function createServer(): Server {
   // Optional: Configure Secret Manager for production
   // Uncomment and customize the secrets array based on your service needs
   const secretManagerConfig: SecretManagerOptions = {
-    enabled: process.env.NODE_ENV === 'production',
+    // enabled: process.env.NODE_ENV === 'production',
+    enabled:false,
     projectId: process.env.GCP_PROJECT_ID,
     cache: true,
     fallbackToEnv: true,
